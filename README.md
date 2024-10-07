@@ -1,39 +1,104 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+A Flutter web plugin to enable vibration functionality in web applications.
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages).
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+This package allows you to vibrate a device via the Vibration API if the browser supports it.
+It provides methods to inject JavaScript, vibrate the device, and check for vibration support.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+- Vibrate the device for a given duration (in milliseconds).
+- Check if the device supports the Vibration API.
+- Inject the required JavaScript into the HTML page automatically.
 
-## Getting started
+## Getting Started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+To use this package, add it to your `pubspec.yaml` file:
+
+```yaml
+dependencies:
+  flutter_web_vibrate: ^last_version
+```
+
+Then, import the package in your Dart file:
+
+```dart
+import 'package:flutter_web_vibrate/flutter_web_vibrate.dart';
+```
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+### Inject JavaScript
+
+You need to inject the JavaScript code into the HTML page before using the vibration functionality.
+Call the `injectJavaScript()` method in your main function:
 
 ```dart
-const like = 'sample';
+void main() {
+  FlutterWebVibrate.injectJavaScript();
+  runApp(MyApp());
+}
 ```
 
-## Additional information
+### Vibrate the Device
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+You can use the `vibrate()` method to make the device vibrate for a specified duration:
+
+```dart
+FlutterWebVibrate.vibrate(200); // Vibrates for 200 milliseconds.
+```
+
+### Check if Vibration is Supported
+
+You can check if the Vibration API is supported by the current browser:
+
+```dart
+bool isSupported = FlutterWebVibrate.isVibrationSupported();
+if (isSupported) {
+  print('Vibration is supported on this device.');
+} else {
+  print('Vibration is not supported on this device.');
+}
+```
+
+## Example
+
+Here is a complete example of how to use the `flutter_web_vibrate` package:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_web_vibrate/flutter_web_vibrate.dart';
+
+void main() {
+  FlutterWebVibrate.injectJavaScript();
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Flutter Web Vibrate Example'),
+        ),
+        body: Center(
+          child: ElevatedButton(
+            onPressed: () {
+              if (FlutterWebVibrate.isVibrationSupported()) {
+                FlutterWebVibrate.vibrate(200); // Vibrates for 200 milliseconds
+              } else {
+                print('Vibration not supported on this device.');
+              }
+            },
+            child: Text('Vibrate Device'),
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+## Additional Information
+
+- This package relies on the `Vibration API`, which is not supported by all browsers.
+- It is recommended to use the `isVibrationSupported()` method before calling `vibrate()` to ensure compatibility.

@@ -1,7 +1,7 @@
 name: flutter_web_vibrate
 description: "Flutter web plugin for the Vibration"
 version: 0.0.1
-homepage:
+homepage: https://github.com/erfaneillat/flutter-web-vibrate
 
 environment:
   sdk: ^3.5.2
